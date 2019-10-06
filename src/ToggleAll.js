@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import { TODO_LIST } from './TodoList';

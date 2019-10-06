@@ -18,7 +18,7 @@ mutation addTodo($name: String!) {
 
 export default () => {
   const inputEl = useRef(null)
-  const [addTodo, { data, loading }] = useMutation(ADD_TODO, {
+  const [addTodo, { loading }] = useMutation(ADD_TODO, {
     awaitRefetchQueries: true,
     refetchQueries: [{ query: TODO_LIST }],
     update(cache, { data }) {

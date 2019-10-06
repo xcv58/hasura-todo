@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import 'todomvc-app-css/index.css'
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
