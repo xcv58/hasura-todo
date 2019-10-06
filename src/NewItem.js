@@ -1,19 +1,19 @@
-import React, { useRef } from 'react';
-import { ENTER_KEY } from './constants';
-import { useMutation } from '@apollo/react-hooks';
+import React, { useRef } from 'react'
+import { ENTER_KEY } from './constants'
+import { useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import { TODO_LIST } from './TodoList'
 
 const ADD_TODO = gql`
-mutation addTodo($name: String!) {
-  insert_todo(objects: [{name: $name}]) {
-    returning {
-      id
-      name
-      done
+  mutation addTodo($name: String!) {
+    insert_todo(objects: [{ name: $name }]) {
+      returning {
+        id
+        name
+        done
+      }
     }
   }
-}
 `
 
 export default () => {
@@ -38,9 +38,9 @@ export default () => {
       placeholder="What needs to be done?"
       onKeyDown={event => {
         if (event.keyCode !== ENTER_KEY) {
-          return;
+          return
         }
-        event.preventDefault();
+        event.preventDefault()
         const name = inputEl.current.value
         addTodo({ variables: { name } })
       }}
