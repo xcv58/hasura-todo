@@ -1,7 +1,6 @@
 import React from 'react'
 import { useMutation } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
-import { TODO_LIST } from './TodoList';
+import gql from 'graphql-tag'
 
 const TOGGLE_ALL = gql`
 mutation toggleAll($done: Boolean!) {
@@ -13,10 +12,7 @@ mutation toggleAll($done: Boolean!) {
 
 export default (props) => {
   const { pendingCount } = props
-  const [toggleAll] = useMutation(TOGGLE_ALL, {
-    awaitRefetchQueries: true,
-    refetchQueries: [{ query: TODO_LIST }]
-  })
+  const [toggleAll] = useMutation(TOGGLE_ALL)
   return (
     <input
       id="toggle-all"

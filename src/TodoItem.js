@@ -1,8 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import classNames from "classnames";
 import { useMutation } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
-import { TODO_LIST } from './TodoList';
+import gql from 'graphql-tag'
 import { ESCAPE_KEY, ENTER_KEY } from './constants';
 
 const TOGGLE_TODO = gql`
@@ -46,8 +45,6 @@ const EditField = (props) => {
   const editField = useRef(null)
   const [text, setText] = useState(name)
   const [updateTodo] = useMutation(UPDATE_TODO, {
-    awaitRefetchQueries: true,
-    refetchQueries: [{ query: TODO_LIST }],
     onCompleted: () => setEditing(false)
   })
   const onSubmit = () => updateTodo({ variables: { id, name: text }})
@@ -81,14 +78,8 @@ const EditField = (props) => {
 export default (props) => {
   const { id, name, done } = props
   const [editing, setEditing] = useState(false)
-  const [toggleTodo] = useMutation(TOGGLE_TODO, {
-    awaitRefetchQueries: true,
-    refetchQueries: [{ query: TODO_LIST }]
-  })
-  const [deleteTodo] = useMutation(DELETE_TODO, {
-    awaitRefetchQueries: true,
-    refetchQueries: [{ query: TODO_LIST }]
-  })
+  const [toggleTodo] = useMutation(TOGGLE_TODO)
+  const [deleteTodo] = useMutation(DELETE_TODO)
   return (
     <li className={classNames({
       editing,

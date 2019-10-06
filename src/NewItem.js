@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { ENTER_KEY } from './constants';
 import { useMutation } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
+import gql from 'graphql-tag'
 import { TODO_LIST } from './TodoList'
 
 const ADD_TODO = gql`
@@ -19,8 +19,6 @@ mutation addTodo($name: String!) {
 export default () => {
   const inputEl = useRef(null)
   const [addTodo, { loading }] = useMutation(ADD_TODO, {
-    awaitRefetchQueries: true,
-    refetchQueries: [{ query: TODO_LIST }],
     update(cache, { data }) {
       const { todo } = cache.readQuery({ query: TODO_LIST })
       cache.writeQuery({

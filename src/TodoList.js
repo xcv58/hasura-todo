@@ -1,6 +1,6 @@
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
+import { useSubscription } from '@apollo/react-hooks';
+import gql from 'graphql-tag'
 import TodoItem from './TodoItem'
 import ToggleAll from './ToggleAll';
 
@@ -17,18 +17,28 @@ export const TODO_LIST = gql`
     }
   }
 }
+`
 
+const TODO_SUBSCRIPTION = gql`
+subscription {
+  todo(order_by: { created_at: desc } ) {
+    id
+    name
+    done
+  }
+}
 `
 
 export default () => {
-  const { loading, error, data } = useQuery(TODO_LIST)
+  const { loading, error, data } = useSubscription(TODO_SUBSCRIPTION)
   if (loading) {
     return <p>Loading...</p>;
   }
   if (error) {
     return <p>Error :(</p>;
   }
-  const { todo: todos, todo_aggregate: { aggregate: { count: pendingCount } } } = data
+  const { todo: todos } = data
+  const pendingCount = todos.filter(x => !x.done).length
 
   return (
     <section className="main">
