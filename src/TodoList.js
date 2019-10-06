@@ -4,13 +4,8 @@ import gql from 'graphql-tag'
 import TodoItem from './TodoItem'
 import ToggleAll from './ToggleAll'
 
-export const TODO_LIST = gql`
-  {
-    todo(order_by: { created_at: desc }) {
-      id
-      name
-      done
-    }
+export const ACTIVE_COUNT_SUBSCRIPTION = gql`
+  subscription {
     todo_aggregate(where: { done: { _eq: false } }) {
       aggregate {
         count
@@ -19,14 +14,21 @@ export const TODO_LIST = gql`
   }
 `
 
-const TODO_SUBSCRIPTION = gql`
+export const TODO_FRAGMENT = gql`
+  fragment TodoFragment on todo {
+    id
+    name
+    done
+  }
+`
+
+export const TODO_SUBSCRIPTION = gql`
   subscription {
     todo(order_by: { created_at: desc }) {
-      id
-      name
-      done
+      ...TodoFragment
     }
   }
+  ${TODO_FRAGMENT}
 `
 
 export default () => {

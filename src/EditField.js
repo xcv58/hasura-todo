@@ -19,10 +19,12 @@ export default props => {
   const { id, name, setEditing, editing } = props
   const editField = useRef(null)
   const [text, setText] = useState(name)
-  const [updateTodo] = useMutation(UPDATE_TODO, {
+  const [updateTodo, { loading }] = useMutation(UPDATE_TODO, {
     onCompleted: () => setEditing(false)
   })
-  const onSubmit = () => updateTodo({ variables: { id, name: text } })
+  const onSubmit = () => {
+    updateTodo({ variables: { id, name: text } })
+  }
   useEffect(() => {
     if (editing) {
       editField.current.focus()
@@ -33,6 +35,7 @@ export default props => {
       ref={editField}
       className="edit"
       value={text}
+      disabled={loading}
       onBlur={() => {
         onSubmit()
       }}
