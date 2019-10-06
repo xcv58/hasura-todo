@@ -9,6 +9,7 @@ import { ApolloProvider } from '@apollo/react-hooks'
 import { getMainDefinition } from 'apollo-utilities'
 import TodoList from './TodoList'
 import NewItem from './NewItem'
+import TodoFooter from './footer'
 
 const httpLink = new HttpLink({
   uri: process.env.REACT_APP_GRAPHQL_ENDPOINT
@@ -48,7 +49,7 @@ export default () => {
           <NewItem />
         </header>
         <TodoList />
-        {/* {footer} */}
+        <TodoFooter />
       </div>
     </ApolloProvider>
   )
