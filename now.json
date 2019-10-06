@@ -1,0 +1,11 @@
+{
+  "name": "hasura-todo",
+  "version": 2,
+  "alias": ["hasura-todo"],
+  "build": {
+    "env": {
+      "REACT_APP_GRAPHQL_ENDPOINT": "@hasura-todo-graphql-endpoint",
+      "REACT_APP_GRAPHQL_WS_ENDPOINT": "@hasura-todo-graphql-ws-endpoint"
+    }
+  }
+}
