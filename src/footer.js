@@ -1,6 +1,8 @@
 import React from 'react'
 import classNames from 'classnames'
 import { ALL_TODOS, ACTIVE_TODOS, COMPLETED_TODOS } from './constants'
+import { Link } from 'react-router-dom'
+import { withRouter } from 'react-router'
 
 class TodoFooter extends React.Component {
   render() {
@@ -18,7 +20,7 @@ class TodoFooter extends React.Component {
       )
     }
 
-    const nowShowing = this.props.nowShowing
+    const { pathname } = this.props.location
     return (
       <footer className="footer">
         <span className="todo-count">
@@ -26,30 +28,29 @@ class TodoFooter extends React.Component {
         </span>
         <ul className="filters">
           <li>
-            <a
-              href="#/"
-              className={classNames({ selected: nowShowing === ALL_TODOS })}
-            >
+            <Link to="/" className={classNames({ selected: pathname === '/' })}>
               All
-            </a>
+            </Link>
           </li>{' '}
           <li>
-            <a
-              href="#/active"
-              className={classNames({ selected: nowShowing === ACTIVE_TODOS })}
+            <Link
+              to="/active"
+              className={classNames({
+                selected: pathname.endsWith(ACTIVE_TODOS)
+              })}
             >
               Active
-            </a>
+            </Link>
           </li>{' '}
           <li>
-            <a
-              href="#/completed"
+            <Link
+              to="/completed"
               className={classNames({
-                selected: nowShowing === COMPLETED_TODOS
+                selected: pathname.endsWith(COMPLETED_TODOS)
               })}
             >
               Completed
-            </a>
+            </Link>
           </li>
         </ul>
         {clearButton}
@@ -58,4 +59,4 @@ class TodoFooter extends React.Component {
   }
 }
 
-export default TodoFooter
+export default withRouter(TodoFooter)
