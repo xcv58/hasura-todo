@@ -11,17 +11,17 @@ const TOGGLE_ALL = gql`
 `
 
 export default props => {
-  const { pendingCount } = props
+  const { activeCount } = props
   const [toggleAll] = useMutation(TOGGLE_ALL)
   return (
     <input
       id="toggle-all"
       className="toggle-all"
       type="checkbox"
-      checked={!pendingCount}
+      checked={!activeCount}
       onChange={() => {
         toggleAll({
-          variables: { done: !!pendingCount }
+          variables: { done: !!activeCount }
         })
       }}
     />

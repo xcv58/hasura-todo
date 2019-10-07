@@ -6,21 +6,35 @@ import {
   COMPLETED_TODOS_ROUTE
 } from './constants'
 import { Link } from 'react-router-dom'
-import { withRouter } from 'react-router'
+import { useMutation } from '@apollo/react-hooks'
+import { CLEAR_COMPLETED } from './query'
 
-const TodoFooter = props => {
-  const { completedCount, route, count, onClearCompleted } = props
-  const activeTodoWord = 'item'
-  let clearButton = null
-
-  if (completedCount > 0) {
-    clearButton = (
-      <button className="clear-completed" onClick={onClearCompleted}>
-        Clear completed
-      </button>
-    )
+const ActiveCounter = ({ activeCount }) => {
+  if (!activeCount) {
+    return null
   }
+  const activeTodoWord = activeCount <= 1 ? 'item' : 'items'
+  return (
+    <span className="todo-count">
+      <strong>{activeCount}</strong> {activeTodoWord} left
+    </span>
+  )
+}
 
+const ClearButton = ({ completedCount }) => {
+  const [clearCompleted] = useMutation(CLEAR_COMPLETED)
+  if (!completedCount) {
+    return null
+  }
+  return (
+    <button className="clear-completed" onClick={clearCompleted}>
+      Clear completed
+    </button>
+  )
+}
+
+export default props => {
+  const { route } = props
   const links = [
     { to: ALL_TODOS_ROUTE, name: 'All' },
     { to: ACTIVE_TODOS_ROUTE, name: 'Active' },
@@ -34,13 +48,9 @@ const TodoFooter = props => {
   ))
   return (
     <footer className="footer">
-      <span className="todo-count">
-        <strong>{count}</strong> {activeTodoWord} left
-      </span>
+      <ActiveCounter {...props} />
       <ul className="filters">{links}</ul>
-      {clearButton}
+      <ClearButton {...props} />
     </footer>
   )
 }
-
-export default withRouter(TodoFooter)
