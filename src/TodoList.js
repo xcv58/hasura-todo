@@ -3,6 +3,7 @@ import { useSubscription } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import TodoItem from './TodoItem'
 import ToggleAll from './ToggleAll'
+import { withRouter } from 'react-router-dom'
 
 export const ACTIVE_COUNT_SUBSCRIPTION = gql`
   subscription {
@@ -23,20 +24,35 @@ export const TODO_FRAGMENT = gql`
 `
 
 export const TODO_SUBSCRIPTION = gql`
-  subscription {
-    todo(order_by: { created_at: desc }) {
-      ...TodoFragment
+  subscription($done: [Boolean!]!) {
+    todo(order_by: { created_at: desc }, where: { done: { _in: $done } }) {
+      id
+      name
+      done
     }
   }
-  ${TODO_FRAGMENT}
 `
 
-export default () => {
-  const { loading, error, data } = useSubscription(TODO_SUBSCRIPTION)
+const TodoList = props => {
+  const { pathname } = props.location
+  console.log({ pathname })
+
+  let done = [true, false]
+  if (pathname === '/active') {
+    done = [false]
+  } else if (pathname === '/completed') {
+    done = [true]
+  }
+
+  const { loading, error, data } = useSubscription(TODO_SUBSCRIPTION, {
+    variables: { done }
+  })
+
   if (loading) {
     return <p>Loading...</p>
   }
   if (error) {
+    console.log(error)
     return <p>Error :(</p>
   }
   const { todo: todos } = data
@@ -54,3 +70,5 @@ export default () => {
     </section>
   )
 }
+
+export default withRouter(TodoList)
