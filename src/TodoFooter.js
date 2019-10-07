@@ -1,11 +1,15 @@
 import React from 'react'
 import classNames from 'classnames'
-import { ACTIVE_TODOS, COMPLETED_TODOS } from './constants'
+import {
+  ALL_TODOS_ROUTE,
+  ACTIVE_TODOS_ROUTE,
+  COMPLETED_TODOS_ROUTE
+} from './constants'
 import { Link } from 'react-router-dom'
 import { withRouter } from 'react-router'
 
 const TodoFooter = props => {
-  const { completedCount, location, count, onClearCompleted } = props
+  const { completedCount, route, count, onClearCompleted } = props
   const activeTodoWord = 'item'
   let clearButton = null
 
@@ -17,39 +21,23 @@ const TodoFooter = props => {
     )
   }
 
-  const { pathname } = location
+  const links = [
+    { to: ALL_TODOS_ROUTE, name: 'All' },
+    { to: ACTIVE_TODOS_ROUTE, name: 'Active' },
+    { to: COMPLETED_TODOS_ROUTE, name: 'Completed' }
+  ].map(({ to, name }) => (
+    <li key={to}>
+      <Link key={to} to={to} className={classNames({ selected: route === to })}>
+        {name}
+      </Link>
+    </li>
+  ))
   return (
     <footer className="footer">
       <span className="todo-count">
         <strong>{count}</strong> {activeTodoWord} left
       </span>
-      <ul className="filters">
-        <li>
-          <Link to="/" className={classNames({ selected: pathname === '/' })}>
-            All
-          </Link>
-        </li>{' '}
-        <li>
-          <Link
-            to="/active"
-            className={classNames({
-              selected: pathname.endsWith(ACTIVE_TODOS)
-            })}
-          >
-            Active
-          </Link>
-        </li>{' '}
-        <li>
-          <Link
-            to="/completed"
-            className={classNames({
-              selected: pathname.endsWith(COMPLETED_TODOS)
-            })}
-          >
-            Completed
-          </Link>
-        </li>
-      </ul>
+      <ul className="filters">{links}</ul>
       {clearButton}
     </footer>
   )
