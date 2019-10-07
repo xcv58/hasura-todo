@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import TodoItem from './TodoItem'
 import ToggleAll from './ToggleAll'
 import { withRouter } from 'react-router-dom'
+import { ACTIVE_TODOS_ROUTE, COMPLETED_TODOS_ROUTE } from './constants'
 
 export const ACTIVE_COUNT_SUBSCRIPTION = gql`
   subscription {
@@ -34,13 +35,12 @@ export const TODO_SUBSCRIPTION = gql`
 `
 
 const TodoList = props => {
-  const { pathname } = props.location
-  console.log({ pathname })
+  const { route } = props
 
   let done = [true, false]
-  if (pathname === '/active') {
+  if (route === ACTIVE_TODOS_ROUTE) {
     done = [false]
-  } else if (pathname === '/completed') {
+  } else if (route === COMPLETED_TODOS_ROUTE) {
     done = [true]
   }
 
@@ -52,7 +52,6 @@ const TodoList = props => {
     return <p>Loading...</p>
   }
   if (error) {
-    console.log(error)
     return <p>Error :(</p>
   }
   const { todo: todos } = data

@@ -10,7 +10,8 @@ import { getMainDefinition } from 'apollo-utilities'
 import TodoList from './TodoList'
 import NewItem from './NewItem'
 import TodoFooter from './TodoFooter'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, withRouter } from 'react-router-dom'
+import { VALID_ROUTES, ALL_TODOS_ROUTE } from './constants'
 
 const httpLink = new HttpLink({
   uri: process.env.REACT_APP_GRAPHQL_ENDPOINT
@@ -41,19 +42,25 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 })
 
-export default () => {
+const App = withRouter(({ location }) => {
+  const { pathname } = location
+  const route = VALID_ROUTES.includes(pathname) ? pathname : ALL_TODOS_ROUTE
   return (
-    <BrowserRouter>
-      <ApolloProvider client={client}>
-        <div>
-          <header className="header">
-            <h1>todos</h1>
-            <NewItem />
-          </header>
-          <TodoList />
-          <TodoFooter />
-        </div>
-      </ApolloProvider>
-    </BrowserRouter>
+    <div>
+      <header className="header">
+        <h1>todos</h1>
+        <NewItem />
+      </header>
+      <TodoList {...{ route }} />
+      <TodoFooter {...{ route }} />
+    </div>
   )
-}
+})
+
+export default () => (
+  <BrowserRouter>
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
+  </BrowserRouter>
+)
