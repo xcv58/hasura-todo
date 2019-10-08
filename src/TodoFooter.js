@@ -34,7 +34,10 @@ const ClearButton = ({ completedCount }) => {
 }
 
 export default props => {
-  const { route } = props
+  const { activeCount, completedCount, route } = props
+  if (!activeCount && !completedCount) {
+    return null
+  }
   const links = [
     { to: ALL_TODOS_ROUTE, name: 'All' },
     { to: ACTIVE_TODOS_ROUTE, name: 'Active' },
